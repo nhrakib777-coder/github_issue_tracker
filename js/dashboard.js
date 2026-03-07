@@ -27,7 +27,6 @@ tabs.forEach((tab) => {
     // set active tab
     if (allTab.checked) {
       allTab.classList.add('bg-primary', 'text-white');
-
     }
     if (openTab.checked) {
       openTab.classList.add('bg-green-400', 'text-white');
@@ -41,10 +40,12 @@ tabs.forEach((tab) => {
 const filterIssues = (status) => {
   if (status === 'all') {
     renderCards(allIssues);
+    updateCounters(allIssues);
     return;
   }
   const filtered = allIssues.filter((issue) => issue.status === status);
   renderCards(filtered);
+  updateCounters(filtered);
 };
 
 // get status border
@@ -85,6 +86,8 @@ const loadIssueCard = async (id) => {
   const res = await fetch(url);
   const data = await res.json();
   displayIssueCard(data.data);
+
+  updateCounters(allIssues);
 };
 // filter function
 let allIssues = [];
@@ -127,6 +130,18 @@ const renderCards = (issues) => {
 
     issueContainer.appendChild(issueCard);
   });
+};
+
+// Counter update
+const updateCounters = (issues) => {
+  // total issue count
+  const total = issues.length;
+
+  // select the text element
+  const countText = document.getElementById('countText');
+
+  // update text
+  countText.innerText = `${total} Issues`;
 };
 
 loadIssueCard();
