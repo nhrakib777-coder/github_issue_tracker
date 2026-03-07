@@ -25,7 +25,7 @@ const handleLogin = () => {
   // set login status in local storage
   localStorage.setItem('isLoggedIn', 'true');
   // redirect to dashboard page
-  window.location.href = '../dashboard.html';
+  window.location.href = 'dashboard.html';
 };
 
 // add eventListener to sign in button
