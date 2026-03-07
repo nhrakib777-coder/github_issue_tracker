@@ -88,8 +88,8 @@
           aria-label="Closed" />
       </div>
     </section>
-    <section class="w-11/12 mx-auto bg-white py-3 px-4 rounded">
-      <div id="countTab" class="flex justify-between items-center">
+    <section class="w-11/12 mx-auto bg-white py-3 px-4  mb-0">
+      <div id="countTab" class="flex flex-col gap-y-3 md:flex-row justify-between items-center">
         <div class="flex gap-3 items-center">
           <img
             class="w-auto bg-[#ECE4FF] p-2 rounded-full"
@@ -97,11 +97,11 @@
             alt="" />
           <div>
             <h2 class="text-[20px] text-[#1f2937] font-semibold">50 Issues</h2>
-            <p class="text-[#647488]">Track and manage your project issues</p>
+            <p class="text-[#647488] text-[13px] ">Track and manage your project issues</p>
           </div>
         </div>
         <div class="flex gap-4">
-         <div class="flex gap-2 items-center">
+          <div class="flex gap-2 items-center">
             <span class="bg-green-500 rounded-full w-[15px] h-[15px]"></span>
             <h2 class="text-[#1f2937] font-medium">Open</h2>
           </div>
@@ -111,9 +111,13 @@
           </div>
         </div>
       </div>
+      
     </section>
     <!-- issues card -->
     
+    <section id="issueContainer" class="w-11/12 grid grid-cols-1 md:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0">
+     
+    </section>
     <script src="./js/dashboard.js"></script>
   </body>
 </html>
