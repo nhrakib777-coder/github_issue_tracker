@@ -1,3 +1,11 @@
+// label array function
+const createElements = (arr) => {
+  const htmlElements = arr.map(
+    (el) => `<span class="badge ${getLabelColor(el)}">${el}</span>`
+  );
+  return htmlElements.join(' ');
+};
+
 // check if user is logged in or not, if not then redirect to login page
 if (localStorage.getItem('isLoggedIn') !== 'true') {
   window.location.href = 'index.html';
@@ -80,6 +88,124 @@ const getPriority = (priority) => {
   }
 };
 
+// get label color
+const getLabelColor = (label) => {
+  if (label === 'bug') {
+    return 'bg-red-100 text-red-500 border border-red-500';
+  } else if (label === 'help wanted') {
+    return 'bg-yellow-100 text-yellow-500 border border-yellow-500';
+  } else if (label === 'good first issue') {
+    return 'bg-blue-100 text-blue-500 border border-blue-500';
+  } else {
+    return 'bg-green-100 text-green-500 border border-green-500';
+  }
+};
+
+// detailed issue
+
+const loadIssueDetail = async (id) => {
+  console.log('Clicked id:', id);
+
+  const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  console.log(data);
+
+  displayIssueDetail(data.data);
+};
+
+// display detail issue
+const displayIssueDetail = (issue) => {
+  console.log(issue);
+   const priorityColor = getPriority(issue.priority);
+  const detailsBox = document.getElementById('details-container');
+  detailsBox.innerHTML = `
+            <h2 class="text-[#1f2937] font-bold text-xl">
+             ${issue.title}
+            </h2>
+            <div class="flex items-center gap-2 p-0">
+              <span class="badge bg-green-400 text-white rounded-full"
+                >${issue.status}</span
+              >
+              <span class="text-[5px] text-[#64748B]"
+                ><i class="fa-solid fa-circle"></i
+              ></span>
+              <p class="text-[9px] text-[#64748B]">Opened by ${issue.author}</p>
+              <span class="text-[5px] text-[#64748B]"
+                ><i class="fa-solid fa-circle"></i
+              ></span>
+              <p class="text-[9px] text-[#64748B]">${issue.createdAt}</p>
+            </div>
+            <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
+            <p class="text-[#647488] text-[14px] text-justify">
+              ${issue.description}
+            </p>
+            <div
+              class="flex justify-between items-center rounded-md bg-base-200 p-3">
+              <div class="text-left">
+                <span>Assignee:</span><br />
+                <p>${issue.assignee} </p>
+              </div>
+              <div class="text-left">
+                <span>Priority:</span><br />
+                <p class="badge ${priorityColor}">${issue.priority}</p>
+              </div>
+            </div>
+
+          
+           <div class="modal-action">
+          <form method="dialog">
+            <button class="btn btn-primary outline-none">Close</button>
+          </form>
+        </div>`;
+  document.getElementById('my_modal_5').showModal();
+ 
+};
+// const displayIssueDetail = (issue) => {
+//   const priorityColor = getPriority(issue.priority);
+
+//   const detailsBox = document.getElementById('details-container');
+//   detailsBox.innerHTML = `<div
+//             class="card bg-white border border-base-300 p-8 space-y-3 rounded-md">
+//             <h2 class="text-[#1f2937] font-bold text-xl">
+//              ${issue.title}
+//             </h2>
+//             <div class="flex items-center gap-2 p-0">
+//               <span class="badge bg-green-400 text-white rounded-full"
+//                 >${issue.status}</span
+//               >
+//               <span class="text-[5px] text-[#64748B]"
+//                 ><i class="fa-solid fa-circle"></i
+//               ></span>
+//               <p class="text-[9px] text-[#64748B]">Opened by ${issue.author}</p>
+//               <span class="text-[5px] text-[#64748B]"
+//                 ><i class="fa-solid fa-circle"></i
+//               ></span>
+//               <p class="text-[9px] text-[#64748B]">${issue.createdAt}</p>
+//             </div>
+//             <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
+//             <p class="text-[#647488] text-[14px] text-justify">
+//               ${issue.description}
+//             </p>
+//             <div
+//               class="flex justify-between items-center rounded-md bg-base-200 p-3">
+//               <div class="text-left">
+//                 <span>Assignee:</span><br />
+//                 <p>${issue.assignee}</p>
+//               </div>
+//               <div class="text-left">
+//                 <span>Priority:</span><br />
+//                 <p class="badge ${priorityColor}">${issue.priority}</p>
+//               </div>
+//             </div>
+
+//           </div>
+//   `;
+//   document.getElementById('my_modal_5').showModal();
+//   console.log(id);
+// };
 // load issue
 const loadIssueCard = async (id) => {
   const url = 'https://phi-lab-server.vercel.app/api/v1/lab/issues';
@@ -107,26 +233,48 @@ const renderCards = (issues) => {
     const priorityColor = getPriority(issue.priority);
 
     issueCard.innerHTML = `
-  <div class="card ${borderColor} bg-white shadow-sm p-4 space-y-2">
+  <div onclick="loadIssueDetail(${issue.id})" class="card ${borderColor} bg-white shadow-sm p-4 space-y-2 min-h-[320px] flex flex-col justify-center cursor-pointer">
 
     <div class="flex justify-between">
-      <span id="point" class=" ${pointColor} text-[13px] w-6 h-6 rounded-full  flex items-center justify-center "><i class="fa-regular fa-circle"></i></span>
+      <span class="${pointColor}  w-6 h-6 p-3 rounded-full flex items-center justify-center">
+        <i class="fa-regular fa-circle"></i>
+      </span>
       <h2 class="badge ${priorityColor}">${issue.priority}</h2>
     </div>
 
     <h2 class="font-semibold text-[14px]">${issue.title}</h2>
+    <p class="text-[12px] text-justify">${issue.description}</p>
 
-    <p class="text-[12px]">${issue.description}</p>
-
-    <span class="badge">${issue.labels}</span>
+    <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
 
     <hr class='border-gray-300'/>
 
-    <span>#${issue.id} by ${issue.author}</span>
-    <span>${issue.createdAt}</span>
+    <span class="text-[12px]">#${issue.id} by ${issue.author}</span>
+    <span class="text-[12px]">${issue.createdAt}</span>
 
   </div>
-  `;
+`;
+    //   issueCard.innerHTML = `
+    // <div onclick="loadIssueDetail('${issue._id}')" class=" card ${borderColor} bg-white shadow-sm p-4 space-y-2 min-h-[320px] flex flex-col justify-center ">
+
+    //   <div class="flex justify-between">
+    //     <span id="point" class=" ${pointColor} text-[13px] w-6 h-6 rounded-full  flex items-center justify-center "><i class="fa-regular fa-circle"></i></span>
+    //     <h2 class="badge ${priorityColor}">${issue.priority}</h2>
+    //   </div>
+
+    //   <h2 class="font-semibold text-[14px]">${issue.title}</h2>
+
+    //   <p class="text-[12px] text-justify">${issue.description}</p>
+
+    //   <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
+
+    //   <hr class='border-gray-300'/>
+
+    //   <span class="text-[12px]">#${issue.id} by ${issue.author}</span>
+    //   <span class="text-[12px]">${issue.createdAt}</span>
+
+    // </div>
+    // `;
 
     issueContainer.appendChild(issueCard);
   });

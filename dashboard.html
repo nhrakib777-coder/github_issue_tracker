@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body class="space-y-4">
-    <header class="bg-base-100 shadow-sm px-8">
+    <header class="bg-base-100 shadow-sm px-8 py-3">
       <div class="navbar flex flex-col md:flex-row gap-2 p-0">
         <div class="flex-1">
           <a class="btn btn-ghost text-xl">
@@ -101,7 +101,9 @@
             src="./assets/Aperture.png"
             alt="" />
           <div>
-            <h2 id="countText" class="text-[20px] text-[#1f2937] font-semibold"></h2>
+            <h2
+              id="countText"
+              class="text-[20px] text-[#1f2937] font-semibold"></h2>
             <p class="text-[#647488] text-[13px]">
               Track and manage your project issues
             </p>
@@ -123,7 +125,21 @@
 
     <section
       id="issueContainer"
-      class="w-11/12 grid grid-cols-1 md:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0"></section>
+      class="w-11/12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0"></section>
+
+    <!-- modal -->
+    <!-- Open the modal using ID.showModal() method -->
+    <dialog id="my_modal_5" class="modal">
+      <div class="modal-box">
+     
+     <div id="details-container"
+            class=" bg-white p-8 space-y-4 rounded-md">
+      
+
+        
+      </div>
+    </dialog>
+
     <script src="./js/dashboard.js"></script>
   </body>
 </html>
