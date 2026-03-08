@@ -49,12 +49,24 @@ tabs.forEach((tab) => {
     // set active tab
     if (allTab.checked) {
       allTab.classList.add('bg-primary', 'text-white');
+      openTab.classList.add('border',
+        'border-gray-200');
+        closeTab.classList.add('border',
+        'border-gray-200');
     }
     if (openTab.checked) {
       openTab.classList.add('bg-green-400', 'text-white');
+       allTab.classList.add('border',
+        'border-gray-200');
+      closeTab.classList.add('border',
+        'border-gray-200');
     }
     if (closeTab.checked) {
       closeTab.classList.add('bg-red-400', 'text-white');
+       allTab.classList.add('border',
+        'border-gray-200');
+         openTab.classList.add('border',
+        'border-gray-200');
     }
   });
 });
@@ -73,7 +85,7 @@ const filterIssues = (status) => {
 // get status border
 const getStatusBorder = (status) => {
   if (status === 'open') {
-    return 'border-t-4 border-green-400';
+    return 'border-t-4 border-green-400 ';
   } else if (status === 'closed') {
     return 'border-t-4 border-red-400';
   } else {
@@ -81,6 +93,7 @@ const getStatusBorder = (status) => {
   }
 };
 
+// get point color
 const getStatusPoint = (status) => {
   if (status === 'open') {
     return 'bg-green-200  text-green-500';
@@ -134,24 +147,27 @@ const loadIssueDetail = async (id) => {
 // display detail issue
 const displayIssueDetail = (issue) => {
   console.log(issue);
+   const pointColor = getStatusPoint(issue.status);
   const priorityColor = getPriority(issue.priority);
   const detailsBox = document.getElementById('details-container');
+  const assignee = issue.assignee ?? "Nur Hasan";
+  
   detailsBox.innerHTML = `
             <h2 class="text-[#1f2937] font-bold text-xl">
              ${issue.title}
             </h2>
             <div class="flex items-center gap-2 p-0">
-              <span class="badge bg-green-400 text-white rounded-full"
+              <span class="badge ${pointColor} rounded-full"
                 >${issue.status}</span
               >
               <span class="text-[5px] text-[#64748B]"
                 ><i class="fa-solid fa-circle"></i
               ></span>
-              <p class="text-[9px] text-[#64748B]">Opened by ${issue.author}</p>
+              <p class="text-[9px] text-[#64748B]">${issue.status} by ${assignee}</p>
               <span class="text-[5px] text-[#64748B]"
                 ><i class="fa-solid fa-circle"></i
               ></span>
-              <p class="text-[9px] text-[#64748B]">${issue.createdAt}</p>
+              <p class="text-[9px] text-[#64748B]">${issue.updatedAt}</p>
             </div>
             <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
             <p class="text-[#647488] text-[14px] text-justify">
@@ -161,7 +177,7 @@ const displayIssueDetail = (issue) => {
               class="flex justify-between items-center rounded-md bg-base-200 p-3">
               <div class="text-left">
                 <span>Assignee:</span><br />
-                <p>${issue.assignee} </p>
+                <p>${assignee} </p>
               </div>
               <div class="text-left">
                 <span>Priority:</span><br />
