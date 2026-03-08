@@ -119,7 +119,7 @@ const loadIssueDetail = async (id) => {
 // display detail issue
 const displayIssueDetail = (issue) => {
   console.log(issue);
-   const priorityColor = getPriority(issue.priority);
+  const priorityColor = getPriority(issue.priority);
   const detailsBox = document.getElementById('details-container');
   detailsBox.innerHTML = `
             <h2 class="text-[#1f2937] font-bold text-xl">
@@ -161,51 +161,8 @@ const displayIssueDetail = (issue) => {
           </form>
         </div>`;
   document.getElementById('my_modal_5').showModal();
- 
 };
-// const displayIssueDetail = (issue) => {
-//   const priorityColor = getPriority(issue.priority);
 
-//   const detailsBox = document.getElementById('details-container');
-//   detailsBox.innerHTML = `<div
-//             class="card bg-white border border-base-300 p-8 space-y-3 rounded-md">
-//             <h2 class="text-[#1f2937] font-bold text-xl">
-//              ${issue.title}
-//             </h2>
-//             <div class="flex items-center gap-2 p-0">
-//               <span class="badge bg-green-400 text-white rounded-full"
-//                 >${issue.status}</span
-//               >
-//               <span class="text-[5px] text-[#64748B]"
-//                 ><i class="fa-solid fa-circle"></i
-//               ></span>
-//               <p class="text-[9px] text-[#64748B]">Opened by ${issue.author}</p>
-//               <span class="text-[5px] text-[#64748B]"
-//                 ><i class="fa-solid fa-circle"></i
-//               ></span>
-//               <p class="text-[9px] text-[#64748B]">${issue.createdAt}</p>
-//             </div>
-//             <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
-//             <p class="text-[#647488] text-[14px] text-justify">
-//               ${issue.description}
-//             </p>
-//             <div
-//               class="flex justify-between items-center rounded-md bg-base-200 p-3">
-//               <div class="text-left">
-//                 <span>Assignee:</span><br />
-//                 <p>${issue.assignee}</p>
-//               </div>
-//               <div class="text-left">
-//                 <span>Priority:</span><br />
-//                 <p class="badge ${priorityColor}">${issue.priority}</p>
-//               </div>
-//             </div>
-
-//           </div>
-//   `;
-//   document.getElementById('my_modal_5').showModal();
-//   console.log(id);
-// };
 // load issue
 const loadIssueCard = async (id) => {
   const url = 'https://phi-lab-server.vercel.app/api/v1/lab/issues';
@@ -220,7 +177,9 @@ let allIssues = [];
 const displayIssueCard = (issues) => {
   allIssues = issues;
   renderCards(issues);
+  updateCounters(issues);
 };
+// renderJobs
 const renderCards = (issues) => {
   const issueContainer = document.getElementById('issueContainer');
   issueContainer.innerHTML = '';
@@ -282,16 +241,41 @@ const renderCards = (issues) => {
 
 // Counter update
 const updateCounters = (issues) => {
-  // total issue count
-  const total = issues.length;
-
   // select the text element
   const countText = document.getElementById('countText');
 
   // update text
-  countText.innerText = `${total} Issues`;
+  countText.innerText = `${issues.length} Issues`;
 };
 
-loadIssueCard();
+// search
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('search-btn');
+const currentTab = 'all';
 
-// renderJobs
+
+function filterAndDisplayIssues() {
+  const query = searchInput.value.trim().toLowerCase();
+  let filtered = allIssues;
+
+  // Filter by current tab first
+  if (currentTab !== 'all') {
+    filtered = filtered.filter((issue) => issue.status === currentTab);
+  }
+
+  // Filter by search query if there is one
+  if (query) {
+    filtered = filtered.filter((issue) =>
+      (issue.title || issue.issue)?.toLowerCase().includes(query)
+    );
+  }
+  // If query is empty, this automatically displays all issues of the current tab
+
+  displayIssueCard(filtered);
+}
+
+// search events
+searchInput.addEventListener('input', filterAndDisplayIssues);
+searchBtn.addEventListener('click', filterAndDisplayIssues);
+
+loadIssueCard();
