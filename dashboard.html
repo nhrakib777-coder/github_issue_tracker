@@ -92,7 +92,7 @@
           <div>
             <h2
               id="countText"
-              class="text-[20px] text-[#1f2937] font-semibold"></h2>
+              class="text-[20px] text-[#1f2937] font-semibold">0 Issues</h2>
             <p class="text-[#647488] text-[13px]">
               Track and manage your project issues
             </p>
@@ -111,7 +111,13 @@
       </div>
     </section>
     <!-- issues card -->
-
+    <section id="spinner" class="hidden  justify-center items-center py-10 " >
+      <span class="loading loading-bars loading-xs"></span>
+        <span class="loading loading-bars loading-sm"></span>
+        <span class="loading loading-bars loading-md"></span>
+        <span class="loading loading-bars loading-lg"></span>
+        <span class="loading loading-bars loading-xl"></span>
+    </section>
     <section
       id="issueContainer"
       class="w-11/12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0"></section>
@@ -128,7 +134,7 @@
         
       </div>
     </dialog>
-
+   
     <script src="./js/dashboard.js"></script>
   </body>
 </html>

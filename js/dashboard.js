@@ -1,3 +1,8 @@
+
+// check if user is logged in or not, if not then redirect to login page
+if (localStorage.getItem('isLoggedIn') !== 'true') {
+  window.location.href = 'index.html';
+}
 // label array function
 const createElements = (arr) => {
   const htmlElements = arr.map(
@@ -6,9 +11,18 @@ const createElements = (arr) => {
   return htmlElements.join(' ');
 };
 
-// check if user is logged in or not, if not then redirect to login page
-if (localStorage.getItem('isLoggedIn') !== 'true') {
-  window.location.href = 'index.html';
+// manage spinner
+const manageSpinner = (status) =>{
+  if(status === true){
+    document.getElementById('spinner').classList.remove('hidden');
+    document.getElementById('spinner').classList.add('flex');
+    document.getElementById('issueContainer').classList.add('hidden');
+
+  }
+  else{
+    document.getElementById('spinner').classList.add('hidden');
+    document.getElementById('issueContainer').classList.remove('hidden');
+  }
 }
 
 // Tabs active
@@ -104,7 +118,7 @@ const getLabelColor = (label) => {
 // detailed issue
 
 const loadIssueDetail = async (id) => {
-  console.log('Clicked id:', id);
+   manageSpinner(true);
 
   const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
 
@@ -114,6 +128,7 @@ const loadIssueDetail = async (id) => {
   console.log(data);
 
   displayIssueDetail(data.data);
+   manageSpinner(false);
 };
 
 // display detail issue
@@ -165,6 +180,7 @@ const displayIssueDetail = (issue) => {
 
 // load issue
 const loadIssueCard = async (id) => {
+   manageSpinner(true);
   const url = 'https://phi-lab-server.vercel.app/api/v1/lab/issues';
   const res = await fetch(url);
   const data = await res.json();
@@ -213,30 +229,10 @@ const renderCards = (issues) => {
 
   </div>
 `;
-    //   issueCard.innerHTML = `
-    // <div onclick="loadIssueDetail('${issue._id}')" class=" card ${borderColor} bg-white shadow-sm p-4 space-y-2 min-h-[320px] flex flex-col justify-center ">
-
-    //   <div class="flex justify-between">
-    //     <span id="point" class=" ${pointColor} text-[13px] w-6 h-6 rounded-full  flex items-center justify-center "><i class="fa-regular fa-circle"></i></span>
-    //     <h2 class="badge ${priorityColor}">${issue.priority}</h2>
-    //   </div>
-
-    //   <h2 class="font-semibold text-[14px]">${issue.title}</h2>
-
-    //   <p class="text-[12px] text-justify">${issue.description}</p>
-
-    //   <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
-
-    //   <hr class='border-gray-300'/>
-
-    //   <span class="text-[12px]">#${issue.id} by ${issue.author}</span>
-    //   <span class="text-[12px]">${issue.createdAt}</span>
-
-    // </div>
-    // `;
-
+    
     issueContainer.appendChild(issueCard);
   });
+   manageSpinner(false);
 };
 
 // Counter update
@@ -269,7 +265,6 @@ function filterAndDisplayIssues() {
       (issue.title || issue.issue)?.toLowerCase().includes(query)
     );
   }
-  // If query is empty, this automatically displays all issues of the current tab
 
   displayIssueCard(filtered);
 }
