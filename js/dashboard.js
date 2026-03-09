@@ -118,9 +118,9 @@ const getStatusBorder = (status) => {
 // get point color
 const getStatusPoint = (status) => {
   if (status === 'open') {
-    return '/assets/Open-Status.png';
+    return './assets/Open-Status.png';
   } else if (status === 'closed') {
-    return '/assets/Closed-Status .png';
+    return './assets/closed-status.png';
   } else {
     return null;
   }
