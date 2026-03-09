@@ -38,6 +38,20 @@ const manageSpinner = (status) => {
     document.getElementById('issueContainer').classList.remove('hidden');
   }
 };
+// modal spinner
+const manageModalSpinner = (status) => {
+  const spinner = document.getElementById("modalSpinner");
+  const content = document.getElementById("details-container");
+
+  if (status) {
+    spinner.classList.remove("hidden");
+    spinner.classList.add("flex");
+    content.classList.add("hidden");
+  } else {
+    spinner.classList.add("hidden");
+    content.classList.remove("hidden");
+  }
+}
 
 // Tabs active
 const allTab = document.getElementById('allTab');
@@ -141,7 +155,8 @@ const getLabelColor = (label) => {
 // detailed issue
 
 const loadIssueDetail = async (id) => {
-  manageSpinner(true);
+  document.getElementById('my_modal_5').showModal();
+  manageModalSpinner(true);
 
   const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
 
@@ -149,8 +164,10 @@ const loadIssueDetail = async (id) => {
   const data = await res.json();
 
   console.log(data);
-  manageSpinner(false);
+
   displayIssueDetail(data.data);
+  manageModalSpinner(false);
+
 };
 
 // display detail issue
@@ -200,7 +217,7 @@ const displayIssueDetail = (issue) => {
             <button class="btn btn-primary outline-none">Close</button>
           </form>
         </div>`;
-  document.getElementById('my_modal_5').showModal();
+
 };
 
 // load issue
@@ -293,7 +310,7 @@ function filterAndDisplayIssues() {
 }
 
 // search events
-// searchInput.addEventListener('input', filterAndDisplayIssues);
+searchInput.addEventListener('input', filterAndDisplayIssues);
 searchBtn.addEventListener('click', filterAndDisplayIssues);
 
 loadIssueCard();

@@ -1,100 +1,66 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | Github Issue Tracker</title>
-    <!-- favicon -->
-    <link
-      rel="shortcut icon"
-      href="./assets/github-logo.png"
-      type="image/x-icon" />
-    <!-- TailwindCSS & DaisyUI -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5"
-      rel="stylesheet"
-      type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap"
-      rel="stylesheet" />
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="./css/main.css" />
-  </head>
-  <body class=" space-y-4">
-    <header class="bg-base-100 shadow-sm px-8 py-3 ">
-      <div class="navbar flex flex-col md:flex-row gap-2 p-0">
-        <div class="flex-1">
-          <a class=" flex items-center gap-3 justify-start cursor-pointer text-xl" href="#">
-            <img class="w-8" src="./assets/github-logo.png" alt="GitHub Logo" />
-            <span class="text-lg">GitHub Issue Tracker</span>
-          </a>
-        </div>
-        <div class="flex gap-2">
-          <input
-          id="searchInput"
-            type="text"
-            placeholder="Search"
-            class="input input-bordered w-auto outline-none focus:border focus:border-gray-200" />
-          <div class="dropdown dropdown-end">
-            <div>
-              <button id="search-btn" class="btn btn-primary hover:btn-outline rounded">
-               <i class="fa-solid fa-plus"></i> New Issue
-              </button>
-            </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Github Issue Tracker</title>
+  <!-- favicon -->
+  <link rel="shortcut icon" href="./assets/github-logo.png" type="image/x-icon" />
+  <!-- TailwindCSS & DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body class=" space-y-4">
+  <header class="bg-base-100 shadow-sm px-8 py-3 ">
+    <div class="navbar flex flex-col md:flex-row gap-2 p-0">
+      <div class="flex-1">
+        <a class=" flex items-center gap-3 justify-start cursor-pointer text-xl" href="#">
+          <img class="w-8" src="./assets/github-logo.png" alt="GitHub Logo" />
+          <span class="text-lg">GitHub Issue Tracker</span>
+        </a>
+      </div>
+      <div class="flex gap-2">
+        <input id="searchInput" type="text" placeholder="Search"
+          class="input input-bordered w-auto outline-none focus:border focus:border-gray-200" />
+        <div class="dropdown dropdown-end">
+          <div>
+            <button id="search-btn" class="btn btn-primary hover:btn-outline text-[12px] md:text-[16px] text-white rounded">
+              <i class="fa-solid fa-plus"></i> New Issue
+            </button>
           </div>
         </div>
       </div>
-    </header>
-   <main class="space-y-3">
-     <section class="w-11/12 mx-auto">
+    </div>
+  </header>
+  <main class="space-y-3">
+    <section class="w-11/12 mx-auto">
       <!-- name of each tab group should be unique -->
       <div class="tabs tabs-box bg-white rounded-md shadow p-3 gap-2">
-        <input
-          id="allTab"
-          type="radio"
-          name="my_tabs_1"
-          class="tab bg-primary text-white w-[100px]"
-          aria-label="All"
-          checked="checked"
-          onclick="filterIssues('all')" />
-        <input
-          id="openTab"
-          type="radio"
-          name="my_tabs_1"
-          class="tab border border-gray-200 w-[100px]"
-          aria-label="Open"
+        <input id="allTab" type="radio" name="my_tabs_1" class="tab bg-primary text-white w-[100px]" aria-label="All"
+          checked="checked" onclick="filterIssues('all')" />
+        <input id="openTab" type="radio" name="my_tabs_1" class="tab border border-gray-200 w-[100px]" aria-label="Open"
           onclick="filterIssues('open')" />
-        <input
-          id="closeTab"
-          type="radio"
-          name="my_tabs_1"
-          class="tab border border-gray-200 w-[100px]"
-          aria-label="Closed"
-          onclick="filterIssues('closed')" />
+        <input id="closeTab" type="radio" name="my_tabs_1" class="tab border border-gray-200 w-[100px]"
+          aria-label="Closed" onclick="filterIssues('closed')" />
       </div>
     </section>
     <section class="w-11/12 mx-auto bg-white py-3 px-4 mb-0 rounded-t-sm drop-shadow">
-      <div
-        id="countTab"
-        class="flex flex-col gap-y-3 md:flex-row justify-between items-center">
+      <div id="countTab" class="flex flex-col gap-y-3 md:flex-row justify-between items-center">
         <div class="flex gap-3 items-center">
-          <img
-            class="w-auto bg-[#ECE4FF] p-2 rounded-full"
-            src="./assets/Aperture.png"
-            alt="" />
+          <img class="w-auto bg-[#ECE4FF] p-2 rounded-full" src="./assets/Aperture.png" alt="" />
           <div>
-            
-            <h2
-              id="countText"
-              class="text-[20px] text-[#1f2937] font-semibold">0 Issues</h2>
+
+            <h2 id="countText" class="text-[20px] text-[#1f2937] font-semibold">0 Issues</h2>
             <p class="text-[#647488] text-[13px]">
               Track and manage your project issues
             </p>
@@ -113,31 +79,41 @@
       </div>
     </section>
     <!-- issues card -->
-    <section id="spinner" class="hidden  justify-center items-center py-10 " >
+    <section id="spinner" class="hidden  justify-center items-center py-10 ">
       <span class="loading loading-bars loading-xs"></span>
-        <span class="loading loading-bars loading-sm"></span>
-        <span class="loading loading-bars loading-md"></span>
-        <span class="loading loading-bars loading-lg"></span>
-        <span class="loading loading-bars loading-xl"></span>
+      <span class="loading loading-bars loading-sm"></span>
+      <span class="loading loading-bars loading-md"></span>
+      <span class="loading loading-bars loading-lg"></span>
+      <span class="loading loading-bars loading-xl"></span>
     </section>
-    <section
-      id="issueContainer"
-      class="w-11/12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0"></section>
+    <section id="issueContainer"
+      class="w-11/12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-[#FBFBFB] py-6 px-3 mx-auto mt-0">
+    </section>
 
     <!-- modal -->
     <!-- Open the modal using ID.showModal() method -->
+
+
+    <div id="modalContent">
+    </div>
     <dialog id="my_modal_5" class="modal">
       <div class="modal-box">
-     
-     <div id="details-container"
-            class=" bg-white p-8 space-y-4 rounded-md drop-shadow-sm">
-      
+        <div id="modalSpinner" class="hidden  justify-center items-center py-10 ">
+          <span class="loading loading-ball loading-xs"></span>
+          <span class="loading loading-ball loading-sm"></span>
+          <span class="loading loading-ball loading-md"></span>
+          <span class="loading loading-ball loading-lg"></span>
+          <span class="loading loading-ball loading-xl"></span>
+        </div>
+        <div id="details-container" class=" bg-white p-8 space-y-4 rounded-md drop-shadow-sm">
 
-        
-      </div>
+
+
+        </div>
     </dialog>
-   </main>
-   
-    <script src="./js/dashboard.js"></script>
-  </body>
+  </main>
+
+  <script src="./js/dashboard.js"></script>
+</body>
+
 </html>
