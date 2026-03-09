@@ -28,8 +28,8 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="./css/main.css" />
   </head>
-  <body class="space-y-4">
-    <header class="bg-base-100 shadow-sm px-8 py-3">
+  <body class=" space-y-4">
+    <header class="bg-base-100 shadow-sm px-8 py-3 ">
       <div class="navbar flex flex-col md:flex-row gap-2 p-0">
         <div class="flex-1">
           <a class=" flex items-center gap-3 justify-start cursor-pointer text-xl" href="#">
@@ -42,18 +42,19 @@
           id="searchInput"
             type="text"
             placeholder="Search"
-            class="input input-bordered w-auto" />
+            class="input input-bordered w-auto outline-none focus:border focus:border-gray-200" />
           <div class="dropdown dropdown-end">
             <div>
               <button id="search-btn" class="btn btn-primary hover:btn-outline rounded">
-                Search
+               <i class="fa-solid fa-plus"></i> New Issue
               </button>
             </div>
           </div>
         </div>
       </div>
     </header>
-    <section class="w-11/12 mx-auto">
+   <main class="space-y-3">
+     <section class="w-11/12 mx-auto">
       <!-- name of each tab group should be unique -->
       <div class="tabs tabs-box bg-white rounded-md shadow p-3 gap-2">
         <input
@@ -80,7 +81,7 @@
           onclick="filterIssues('closed')" />
       </div>
     </section>
-    <section class="w-11/12 mx-auto bg-white py-3 px-4 mb-0">
+    <section class="w-11/12 mx-auto bg-white py-3 px-4 mb-0 rounded-t-sm drop-shadow">
       <div
         id="countTab"
         class="flex flex-col gap-y-3 md:flex-row justify-between items-center">
@@ -90,6 +91,7 @@
             src="./assets/Aperture.png"
             alt="" />
           <div>
+            
             <h2
               id="countText"
               class="text-[20px] text-[#1f2937] font-semibold">0 Issues</h2>
@@ -128,12 +130,13 @@
       <div class="modal-box">
      
      <div id="details-container"
-            class=" bg-white p-8 space-y-4 rounded-md">
+            class=" bg-white p-8 space-y-4 rounded-md drop-shadow-sm">
       
 
         
       </div>
     </dialog>
+   </main>
    
     <script src="./js/dashboard.js"></script>
   </body>

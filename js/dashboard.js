@@ -1,29 +1,43 @@
-
 // check if user is logged in or not, if not then redirect to login page
 if (localStorage.getItem('isLoggedIn') !== 'true') {
   window.location.href = 'index.html';
 }
+
+// global variables
+
 // label array function
+const labelIcons = {
+  bug: 'fa-solid fa-bug',
+  enhancement: 'fa-solid fa-star',
+  'help wanted': 'fa-solid fa-hand',
+  'good first issue': 'fa-solid fa-seedling',
+  documentation: 'fa-regular fa-file',
+};
 const createElements = (arr) => {
-  const htmlElements = arr.map(
-    (el) => `<span class="badge ${getLabelColor(el)}">${el}</span>`
-  );
+  const htmlElements = arr.map((el) => {
+    const iconClass = labelIcons[el];
+
+    return `
+      <span class="badge ${getLabelColor(el)} flex items-center text-[10px] uppercase gap-1">
+        <i class="${iconClass} "></i> ${el}
+      </span>
+    `;
+  });
+
   return htmlElements.join(' ');
 };
 
 // manage spinner
-const manageSpinner = (status) =>{
-  if(status === true){
+const manageSpinner = (status) => {
+  if (status === true) {
     document.getElementById('spinner').classList.remove('hidden');
     document.getElementById('spinner').classList.add('flex');
     document.getElementById('issueContainer').classList.add('hidden');
-
-  }
-  else{
+  } else {
     document.getElementById('spinner').classList.add('hidden');
     document.getElementById('issueContainer').classList.remove('hidden');
   }
-}
+};
 
 // Tabs active
 const allTab = document.getElementById('allTab');
@@ -49,24 +63,18 @@ tabs.forEach((tab) => {
     // set active tab
     if (allTab.checked) {
       allTab.classList.add('bg-primary', 'text-white');
-      openTab.classList.add('border',
-        'border-gray-200');
-        closeTab.classList.add('border',
-        'border-gray-200');
+      openTab.classList.add('border', 'border-gray-200');
+      closeTab.classList.add('border', 'border-gray-200');
     }
     if (openTab.checked) {
       openTab.classList.add('bg-green-400', 'text-white');
-       allTab.classList.add('border',
-        'border-gray-200');
-      closeTab.classList.add('border',
-        'border-gray-200');
+      allTab.classList.add('border', 'border-gray-200');
+      closeTab.classList.add('border', 'border-gray-200');
     }
     if (closeTab.checked) {
       closeTab.classList.add('bg-red-400', 'text-white');
-       allTab.classList.add('border',
-        'border-gray-200');
-         openTab.classList.add('border',
-        'border-gray-200');
+      allTab.classList.add('border', 'border-gray-200');
+      openTab.classList.add('border', 'border-gray-200');
     }
   });
 });
@@ -96,11 +104,11 @@ const getStatusBorder = (status) => {
 // get point color
 const getStatusPoint = (status) => {
   if (status === 'open') {
-    return 'bg-green-200  text-green-500';
+    return '/assets/Open-Status.png';
   } else if (status === 'closed') {
-    return 'bg-red-200  text-red-500';
+    return '/assets/Closed-Status .png';
   } else {
-    return 'bg-yellow-200  text-yellow-500';
+    return null;
   }
 };
 
@@ -123,15 +131,17 @@ const getLabelColor = (label) => {
     return 'bg-yellow-100 text-yellow-500 border border-yellow-500';
   } else if (label === 'good first issue') {
     return 'bg-blue-100 text-blue-500 border border-blue-500';
-  } else {
+  } else if (label === 'enhancement') {
     return 'bg-green-100 text-green-500 border border-green-500';
+  } else {
+    return 'bg-purple-100 text-purple-500 border border-purple-500';
   }
 };
 
 // detailed issue
 
 const loadIssueDetail = async (id) => {
-   manageSpinner(true);
+  manageSpinner(true);
 
   const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
 
@@ -139,19 +149,18 @@ const loadIssueDetail = async (id) => {
   const data = await res.json();
 
   console.log(data);
-
+  manageSpinner(false);
   displayIssueDetail(data.data);
-   manageSpinner(false);
 };
 
 // display detail issue
 const displayIssueDetail = (issue) => {
   console.log(issue);
-   const pointColor = getStatusPoint(issue.status);
+  const pointColor = getStatusPoint(issue.status);
   const priorityColor = getPriority(issue.priority);
   const detailsBox = document.getElementById('details-container');
-  const assignee = issue.assignee ?? "Nur Hasan";
-  
+  const assignee = issue.assignee || 'Nur Hasan';
+  const formatedDate = new Date(issue.updatedAt).toLocaleDateString();
   detailsBox.innerHTML = `
             <h2 class="text-[#1f2937] font-bold text-xl">
              ${issue.title}
@@ -167,7 +176,7 @@ const displayIssueDetail = (issue) => {
               <span class="text-[5px] text-[#64748B]"
                 ><i class="fa-solid fa-circle"></i
               ></span>
-              <p class="text-[9px] text-[#64748B]">${issue.updatedAt}</p>
+              <p class="text-[9px] text-[#64748B]">${formatedDate}</p>
             </div>
             <div class="flex flex-wrap gap-2 ">${createElements(issue.labels)}</div>
             <p class="text-[#647488] text-[14px] text-justify">
@@ -181,7 +190,7 @@ const displayIssueDetail = (issue) => {
               </div>
               <div class="text-left">
                 <span>Priority:</span><br />
-                <p class="badge ${priorityColor}">${issue.priority}</p>
+                <p class="badge uppercase ${priorityColor}">${issue.priority}</p>
               </div>
             </div>
 
@@ -196,7 +205,7 @@ const displayIssueDetail = (issue) => {
 
 // load issue
 const loadIssueCard = async (id) => {
-   manageSpinner(true);
+  manageSpinner(true);
   const url = 'https://phi-lab-server.vercel.app/api/v1/lab/issues';
   const res = await fetch(url);
   const data = await res.json();
@@ -222,15 +231,14 @@ const renderCards = (issues) => {
     const borderColor = getStatusBorder(issue.status);
     const pointColor = getStatusPoint(issue.status);
     const priorityColor = getPriority(issue.priority);
-
+    const formatedDate = new Date(issue.createdAt).toLocaleDateString();
     issueCard.innerHTML = `
-  <div onclick="loadIssueDetail(${issue.id})" class="card ${borderColor} bg-white shadow-sm p-4 space-y-2 min-h-[320px] flex flex-col justify-center cursor-pointer">
+  <div onclick="loadIssueDetail(${issue.id})" class="card ${borderColor} bg-white drop-shadow-sm p-4 space-y-2 min-h-[320px] flex flex-col justify-center cursor-pointer">
 
     <div class="flex justify-between">
-      <span class="${pointColor}  w-6 h-6 p-3 rounded-full flex items-center justify-center">
-        <i class="fa-regular fa-circle"></i>
-      </span>
-      <h2 class="badge ${priorityColor}">${issue.priority}</h2>
+      <img src="${pointColor}" class="w-4 h-4" alt="">
+      
+      <h2 class="badge uppercase ${priorityColor}">${issue.priority}</h2>
     </div>
 
     <h2 class="font-semibold text-[14px]">${issue.title}</h2>
@@ -241,14 +249,14 @@ const renderCards = (issues) => {
     <hr class='border-gray-300'/>
 
     <span class="text-[12px]">#${issue.id} by ${issue.author}</span>
-    <span class="text-[12px]">${issue.createdAt}</span>
+    <span class="text-[12px]">${formatedDate}</span>
 
   </div>
 `;
-    
+
     issueContainer.appendChild(issueCard);
   });
-   manageSpinner(false);
+  manageSpinner(false);
 };
 
 // Counter update
@@ -264,7 +272,6 @@ const updateCounters = (issues) => {
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('search-btn');
 const currentTab = 'all';
-
 
 function filterAndDisplayIssues() {
   const query = searchInput.value.trim().toLowerCase();
@@ -286,7 +293,7 @@ function filterAndDisplayIssues() {
 }
 
 // search events
-searchInput.addEventListener('input', filterAndDisplayIssues);
+// searchInput.addEventListener('input', filterAndDisplayIssues);
 searchBtn.addEventListener('click', filterAndDisplayIssues);
 
 loadIssueCard();

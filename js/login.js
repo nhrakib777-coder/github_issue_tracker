@@ -9,7 +9,7 @@ const handleLogin = () => {
   // get inpur value
   const userNameValue = userName.value;
   const passWordValue = passWord.value;
-// validation
+  // validation
   if (userNameValue === '' || passWordValue === '') {
     alert('Please fill in both username and password fields.');
     return;
@@ -30,3 +30,8 @@ const handleLogin = () => {
 
 // add eventListener to sign in button
 signInBtn.addEventListener('click', handleLogin);
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    handleLogin();
+  }
+});
